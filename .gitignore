@@ -1,2 +1,3 @@
-# Godot — import/editor cache, regenerated when the project is opened
+# Godot 4+ specific ignores — import/editor cache, regenerated when the project is opened
 .godot/
+/android/

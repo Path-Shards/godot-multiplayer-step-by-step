@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://cajfsg718ex4v"]
+
+[ext_resource type="Script" uid="uid://bauko06330l6f" path="res://player.gd" id="1_xhfnw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fjby7"]
+size = Vector2(40, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rxgug"]
+
+[node name="Player" type="CharacterBody2D" unique_id=1986371304]
+script = ExtResource("1_xhfnw")
+
+[node name="Visual" type="Polygon2D" parent="." unique_id=2132058817]
+color = Color(0.54901963, 0.5803922, 0.61960787, 1)
+polygon = PackedVector2Array(-20, -20, 20, -20, 20, 20, -20, 20)
+
+[node name="Collision" type="CollisionShape2D" parent="." unique_id=724760927]
+shape = SubResource("RectangleShape2D_fjby7")
+
+[node name="TouchZone" type="Area2D" parent="." unique_id=1259373130]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TouchZone" unique_id=1791015088]
+shape = SubResource("RectangleShape2D_rxgug")
+
+[connection signal="body_entered" from="TouchZone" to="." method="_on_touch_zone_body_entered"]

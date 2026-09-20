@@ -2,8 +2,9 @@
 
 [ext_resource type="Script" uid="uid://dsaciurjobbl5" path="res://lobby/lobby.gd" id="1_73r88"]
 [ext_resource type="Script" uid="uid://bpxrej3smj03p" path="res://network/connection.gd" id="1_ntgqb"]
+[ext_resource type="Script" uid="uid://dui8xdm7w0f01" path="res://network/discovery.gd" id="3_8nj80"]
 
-[node name="Lobby" type="Control" unique_id=1086728968 node_paths=PackedStringArray("connection")]
+[node name="Lobby" type="Control" unique_id=1086728968 node_paths=PackedStringArray("connection", "discovery")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,6 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_73r88")
 connection = NodePath("Connection")
+discovery = NodePath("Discovery")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1242061753]
 layout_mode = 1
@@ -60,4 +62,17 @@ layout_mode = 2
 [node name="Connection" type="Node" parent="." unique_id=1984874610]
 script = ExtResource("1_ntgqb")
 
+[node name="Discovery" type="Node" parent="." unique_id=977225002]
+script = ExtResource("3_8nj80")
+
+[node name="AdvertiseTimer" type="Timer" parent="." unique_id=933416418]
+
+[node name="RefreshTimer" type="Timer" parent="." unique_id=825393306]
+wait_time = 0.5
+autostart = true
+
 [connection signal="pressed" from="Controls/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="item_selected" from="Controls/MatchList" to="." method="_on_match_list_item_selected"]
+[connection signal="pressed" from="Controls/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="timeout" from="AdvertiseTimer" to="." method="_on_advertise_timer_timeout"]
+[connection signal="timeout" from="RefreshTimer" to="." method="_on_refresh_timer_timeout"]

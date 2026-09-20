@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dx1phy6j6cd64"]
+
+[ext_resource type="PackedScene" uid="uid://cxcgnm3lblxh7" path="res://Arena.tscn" id="1_uu6xs"]
+[ext_resource type="PackedScene" uid="uid://d4gcf8it45d0g" path="res://lobby/Lobby.tscn" id="2_r0du0"]
+
+[node name="Main" type="Node" unique_id=181311626]
+
+[node name="Arena" parent="." unique_id=340691152 instance=ExtResource("1_uu6xs")]
+
+[node name="Lobby" parent="." unique_id=1086728968 instance=ExtResource("2_r0du0")]

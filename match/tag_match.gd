@@ -20,6 +20,13 @@ func start(host_peer_id: int, client_peer_id: int) -> void:
 	_broadcast_state()
 
 
+func stop() -> void:
+	for peer_id in _players:
+		_players[peer_id].queue_free()
+	_players.clear()
+	_state = null
+
+
 func _on_contact_changed(body: Node2D, touching: bool, zone_owner: CharacterBody2D) -> void:
 	if not multiplayer.is_server() or body == zone_owner or _state == null:
 		return

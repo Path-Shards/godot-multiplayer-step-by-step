@@ -11,6 +11,8 @@ const CLIENT_START := Vector2(872, 324)
 func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
+	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
+	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
 
 func _on_peer_connected(peer_id: int) -> void:
@@ -21,6 +23,14 @@ func _on_peer_connected(peer_id: int) -> void:
 
 func _on_connected_to_server() -> void:
 	_start_match(multiplayer.get_unique_id())
+
+
+func _on_peer_disconnected(_peer_id: int) -> void:
+	_tag_match.stop()
+
+
+func _on_server_disconnected() -> void:
+	_tag_match.stop()
 
 
 func _start_match(client_peer_id: int) -> void:

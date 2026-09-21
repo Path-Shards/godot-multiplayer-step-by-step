@@ -3,6 +3,7 @@ extends Control
 const NO_MATCHES_MESSAGE := "No matches found."
 const HOST_FAILED_MESSAGE := "Could not host a match."
 const JOIN_FAILED_MESSAGE := "Could not join that match."
+const HOST_DISCONNECTED_MESSAGE := "The host disconnected."
 
 @export var connection: Connection
 @export var discovery: Discovery
@@ -24,6 +25,8 @@ var _match_list_rule := MatchList.new()
 
 func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_peer_connected)
+	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
+	multiplayer.server_disconnected.connect(_on_server_disconnected)
 	multiplayer.connection_failed.connect(_on_connection_failed)
 	discovery.start_listening()
 	_redraw_matches()
@@ -124,3 +127,17 @@ func _show_search() -> void:
 
 func _on_peer_connected(_peer_id: int) -> void:
 	hide()
+
+
+func _on_peer_disconnected(_peer_id: int) -> void:
+	if not multiplayer.is_server():
+		return
+	show()
+	_show_waiting()
+
+
+func _on_server_disconnected() -> void:
+	connection.close()
+	show()
+	_show_search()
+	_show_notice(HOST_DISCONNECTED_MESSAGE)

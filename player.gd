@@ -1,6 +1,21 @@
 extends CharacterBody2D
 
 const SPEED := 250.0
+const LOCAL_TEXT := "You"
+const REMOTE_TEXT := "Opponent"
+
+var owner_peer_id := 0
+
+@onready var _identity_label: Label = $IdentityLabel
+
+
+func _ready() -> void:
+	if owner_peer_id == multiplayer.get_unique_id():
+		_identity_label.text = LOCAL_TEXT
+	else:
+		_identity_label.text = REMOTE_TEXT
+
+
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority():
 		return

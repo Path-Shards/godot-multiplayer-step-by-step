@@ -30,5 +30,6 @@ func _spawn_player(peer_id: int, start_position: Vector2) -> void:
 	var player := PLAYER_SCENE.instantiate()
 	player.name = "Player%d" % peer_id
 	player.position = start_position
+	player.owner_peer_id = peer_id
 	add_child(player, true)
 	player.set_multiplayer_authority(peer_id)

@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://cxcgnm3lblxh7"]
 
 [ext_resource type="Script" uid="uid://b0mjrmj5r2o3i" path="res://arena.gd" id="1_bcb0y"]
+[ext_resource type="Script" uid="uid://hmx7n2dwv2t7" path="res://match/tag_match.gd" id="2_u45fm"]
 
 [node name="Arena" type="Node2D" unique_id=340691152]
 script = ExtResource("1_bcb0y")
+
+[node name="TagMatch" type="Node" parent="." unique_id=555590792]
+script = ExtResource("2_u45fm")

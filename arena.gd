@@ -5,6 +5,8 @@ const HOST_PEER_ID := 1
 const HOST_START := Vector2(280, 324)
 const CLIENT_START := Vector2(872, 324)
 
+@onready var _tag_match: Node = $TagMatch
+
 
 func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_peer_connected)
@@ -24,6 +26,7 @@ func _on_connected_to_server() -> void:
 func _start_match(client_peer_id: int) -> void:
 	_spawn_player(HOST_PEER_ID, HOST_START)
 	_spawn_player(client_peer_id, CLIENT_START)
+	_tag_match.start(HOST_PEER_ID, client_peer_id)
 
 
 func _spawn_player(peer_id: int, start_position: Vector2) -> void:
@@ -33,3 +36,4 @@ func _spawn_player(peer_id: int, start_position: Vector2) -> void:
 	player.owner_peer_id = peer_id
 	add_child(player, true)
 	player.set_multiplayer_authority(peer_id)
+	_tag_match.add_player(peer_id, player)

@@ -9,12 +9,14 @@ const JOIN_FAILED_MESSAGE := "Could not join that match."
 
 var _matches: Array = []
 var _selected_address := ""
+var _notice := ""
 var _match_list_rule := MatchList.new()
 
 @onready var _host_button: Button = $Controls/HostButton
 @onready var _match_list: ItemList = $Controls/MatchList
 @onready var _join_button: Button = $Controls/JoinButton
 @onready var _waiting_label: Label = $Controls/WaitingLabel
+@onready var _cancel_button: Button = $Controls/CancelButton
 @onready var _message_label: Label = $Controls/MessageLabel
 @onready var _advertise_timer: Timer = $AdvertiseTimer
 @onready var _refresh_timer: Timer = $RefreshTimer
@@ -22,13 +24,15 @@ var _match_list_rule := MatchList.new()
 
 func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_peer_connected)
+	multiplayer.connection_failed.connect(_on_connection_failed)
 	discovery.start_listening()
 	_redraw_matches()
 
 
 func _on_host_button_pressed() -> void:
+	_notice = ""
 	if connection.host(Connection.PORT, Connection.MAX_CONNECTIONS) != Connection.Result.NONE:
-		_message_label.text = HOST_FAILED_MESSAGE
+		_show_notice(HOST_FAILED_MESSAGE)
 		return
 	_show_waiting()
 
@@ -39,8 +43,19 @@ func _on_match_list_item_selected(index: int) -> void:
 
 
 func _on_join_button_pressed() -> void:
+	_notice = ""
 	if connection.join(_selected_address, Connection.PORT) != Connection.Result.NONE:
-		_message_label.text = JOIN_FAILED_MESSAGE
+		_show_notice(JOIN_FAILED_MESSAGE)
+
+
+func _on_cancel_button_pressed() -> void:
+	connection.close()
+	_show_search()
+
+
+func _on_connection_failed() -> void:
+	connection.close()
+	_show_notice(JOIN_FAILED_MESSAGE)
 
 
 func _on_refresh_timer_timeout() -> void:
@@ -65,19 +80,46 @@ func _redraw_matches() -> void:
 			if _matches[index]["address"] == _selected_address:
 				_match_list.select(index)
 	_join_button.visible = _selected_address != ""
+	_update_message()
+
+
+func _update_message() -> void:
+	if _notice != "":
+		_message_label.text = _notice
+		return
 	_message_label.text = "" if _matches.size() > 0 else NO_MATCHES_MESSAGE
+
+
+func _show_notice(text: String) -> void:
+	_notice = text
+	_update_message()
 
 
 func _show_waiting() -> void:
 	_host_button.visible = false
 	_match_list.visible = false
 	_join_button.visible = false
-	_message_label.text = ""
 	_waiting_label.visible = true
+	_cancel_button.visible = true
+	_notice = ""
+	_message_label.text = ""
 	_refresh_timer.stop()
 	discovery.stop_listening()
 	discovery.advertise()
 	_advertise_timer.start()
+
+
+func _show_search() -> void:
+	_host_button.visible = true
+	_match_list.visible = true
+	_waiting_label.visible = false
+	_cancel_button.visible = false
+	_matches = []
+	_selected_address = ""
+	_advertise_timer.stop()
+	discovery.start_listening()
+	_refresh_timer.start()
+	_redraw_matches()
 
 
 func _on_peer_connected(_peer_id: int) -> void:

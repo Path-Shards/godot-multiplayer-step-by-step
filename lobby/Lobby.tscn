@@ -56,6 +56,11 @@ visible = false
 layout_mode = 2
 text = "Waiting for a player..."
 
+[node name="CancelButton" type="Button" parent="Controls" unique_id=616928746]
+visible = false
+layout_mode = 2
+text = "Cancel"
+
 [node name="MessageLabel" type="Label" parent="Controls" unique_id=228485747]
 layout_mode = 2
 
@@ -74,5 +79,6 @@ autostart = true
 [connection signal="pressed" from="Controls/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="item_selected" from="Controls/MatchList" to="." method="_on_match_list_item_selected"]
 [connection signal="pressed" from="Controls/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="Controls/CancelButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="timeout" from="AdvertiseTimer" to="." method="_on_advertise_timer_timeout"]
 [connection signal="timeout" from="RefreshTimer" to="." method="_on_refresh_timer_timeout"]

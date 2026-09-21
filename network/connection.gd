@@ -25,3 +25,7 @@ func join(address: String, port: int) -> Result:
 		return Result.HOST_UNAVAILABLE
 	multiplayer.multiplayer_peer = peer
 	return Result.NONE
+
+
+func close() -> void:
+	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()

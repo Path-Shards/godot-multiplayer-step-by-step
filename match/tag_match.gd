@@ -9,6 +9,7 @@ var _players: Dictionary = {}
 
 func add_player(peer_id: int, player: CharacterBody2D) -> void:
 	_players[peer_id] = player
+	player.contact_changed.connect(_on_contact_changed.bind(player))
 
 
 func start(host_peer_id: int, client_peer_id: int) -> void:
@@ -16,6 +17,13 @@ func start(host_peer_id: int, client_peer_id: int) -> void:
 		_request_state.rpc_id(HOST_PEER_ID)
 		return
 	_state = _rules.first_state(host_peer_id, client_peer_id)
+	_broadcast_state()
+
+
+func _on_contact_changed(body: Node2D, touching: bool, zone_owner: CharacterBody2D) -> void:
+	if not multiplayer.is_server() or body == zone_owner or _state == null:
+		return
+	_state = _rules.resolve(_state, touching)
 	_broadcast_state()
 
 

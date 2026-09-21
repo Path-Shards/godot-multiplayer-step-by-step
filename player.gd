@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal contact_changed(other: Node2D, touching: bool)
+
 const SPEED := 250.0
 const LOCAL_TEXT := "You"
 const REMOTE_TEXT := "Opponent"
@@ -37,4 +39,8 @@ func _sync_position(remote_position: Vector2) -> void:
 
 
 func _on_touch_zone_body_entered(body: Node2D) -> void:
-	print("Something entered the area: ", body.name)
+	contact_changed.emit(body, true)
+
+
+func _on_touch_zone_body_exited(body: Node2D) -> void:
+	contact_changed.emit(body, false)
